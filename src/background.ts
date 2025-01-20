@@ -16,25 +16,29 @@ const SET_OMC_COOKIE_VAL = (callback?) => {
       name: CookieKeysEnum.OMC.key
     },
     function (cookie) {
-      if (
-        Array.isArray(cookie) &&
-        cookie.length > 0 &&
-        cookie.some((item) => item.domain === CookieKeysEnum.OMC.qa_domain)
-      ) {
-        const cookieVal = cookie.find(
-          (item) => item.domain === CookieKeysEnum.OMC.qa_domain
-        )
-        OMC_COOKIE.status = Login_Status[1]
-        OMC_COOKIE.value = get(
-          JSON.parse(decodeURIComponent(cookieVal.value)),
-          CookieKeysEnum.OMC.subKeyPath
-        )
-        OMC_COOKIE.cookie = cookieVal.value.toString()
-      } else {
-        OMC_COOKIE.status = Login_Status[0]
-        OMC_COOKIE.value = ""
+      try {
+        if (
+          Array.isArray(cookie) &&
+          cookie.length > 0 &&
+          cookie.some((item) => item.domain === CookieKeysEnum.OMC.qa_domain)
+        ) {
+          const cookieVal = cookie.find(
+            (item) => item.domain === CookieKeysEnum.OMC.qa_domain
+          )
+          OMC_COOKIE.status = Login_Status[1]
+          OMC_COOKIE.value = get(
+            JSON.parse(decodeURIComponent(cookieVal.value)),
+            CookieKeysEnum.OMC.subKeyPath
+          )
+          OMC_COOKIE.cookie = cookieVal.value.toString()
+        } else {
+          OMC_COOKIE.status = Login_Status[0]
+          OMC_COOKIE.value = ""
+        }
+        callback && callback()
+      } catch (err) {
+        console.log("err :>> ", err)
       }
-      callback && callback()
     }
   )
 }

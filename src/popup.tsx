@@ -53,7 +53,7 @@ const Popup = () => {
   }
   useEffect(() => {
     if (OMC_COOKIE.status === Login_Status[0]) {
-      Message.error("未找到cookie，请重新登录123")
+      Message.error("未找到cookie，请重新登录")
       sleep(800).then(() => {
         chrome.tabs.create({
           url: CookieKeysEnum.OMC.test_env_url
