@@ -35,10 +35,11 @@ const SET_OMC_COOKIE_VAL = (callback?) => {
           OMC_COOKIE.status = Login_Status[0]
           OMC_COOKIE.value = ""
         }
-        callback && callback()
       } catch (err) {
-        console.log("err :>> ", err)
+        OMC_COOKIE.status = Login_Status[0]
+        OMC_COOKIE.value = ""
       }
+      callback && callback()
     }
   )
 }
