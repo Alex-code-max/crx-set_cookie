@@ -52,8 +52,15 @@ const Popup = () => {
     )
   }
   useEffect(() => {
-    if (OMC_COOKIE.status === Login_Status[0]) {
-      Message.error("未找到cookie，请重新登录")
+    if (
+      OMC_COOKIE.status === Login_Status[0] ||
+      OMC_COOKIE.status === Login_Status[2]
+    ) {
+      if (OMC_COOKIE.status === Login_Status[0]) {
+        Message.error("未找到cookie，请重新登录")
+      } else {
+        Message.error("Token已过期，请重新登录")
+      }
       sleep(800).then(() => {
         chrome.tabs.create({
           url: CookieKeysEnum.OMC.test_env_url

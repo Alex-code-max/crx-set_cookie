@@ -15,7 +15,7 @@ const SET_OMC_COOKIE_VAL = (callback?) => {
       domain: CookieKeysEnum.OMC.qa_domain,
       name: CookieKeysEnum.OMC.key
     },
-    function (cookie) {
+    async (cookie) => {
       try {
         if (
           Array.isArray(cookie) &&
@@ -25,12 +25,28 @@ const SET_OMC_COOKIE_VAL = (callback?) => {
           const cookieVal = cookie.find(
             (item) => item.domain === CookieKeysEnum.OMC.qa_domain
           )
-          OMC_COOKIE.status = Login_Status[1]
-          OMC_COOKIE.value = get(
+          const token = get(
             JSON.parse(decodeURIComponent(cookieVal.value)),
             CookieKeysEnum.OMC.subKeyPath
           )
-          OMC_COOKIE.cookie = cookieVal.value.toString()
+          if (token) {
+            const res = await RequestFetch(
+              CookieKeysEnum.OMC.test_api_url,
+              "GET",
+              token
+            )
+            if (res.code === "502") {
+              OMC_COOKIE.status = Login_Status[2]
+              OMC_COOKIE.value = ""
+            } else {
+              OMC_COOKIE.status = Login_Status[1]
+              OMC_COOKIE.value = token
+              OMC_COOKIE.cookie = cookieVal.value.toString()
+            }
+          } else {
+            OMC_COOKIE.status = Login_Status[0]
+            OMC_COOKIE.value = ""
+          }
         } else {
           OMC_COOKIE.status = Login_Status[0]
           OMC_COOKIE.value = ""
