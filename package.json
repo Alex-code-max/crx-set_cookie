@@ -35,7 +35,7 @@
     "host_permissions": [
       "*://*.payermax.com/*",
       "*://*.itcjf.com/*",
-      "http://localhost:9539/*"
+      "http://localhost/*"
     ]
   }
 }

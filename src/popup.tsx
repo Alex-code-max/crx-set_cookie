@@ -19,10 +19,24 @@ const Popup = () => {
     cookie: ""
   })
   const handleGetOMCCookie = () => {
+    setLoading(true)
+    const close = Message.info({
+      content: "正在获取和过期校验中...",
+      duration: 0
+    })
+    setOMC_COOKIE({
+      status: Login_Status[1],
+      value: "",
+      cookie: ""
+    })
     chrome.runtime.sendMessage({ action: "OMC_GET_COOKIE" }, (response) => {
       setOMC_COOKIE(response.OMC_COOKIE)
+      setLoading(false)
+      close()
     })
   }
+
+  const [loading, setLoading] = useState(false)
 
   const handleWriteOMCToLocal = () => {
     chrome.runtime.sendMessage(
@@ -77,7 +91,11 @@ const Popup = () => {
       <Tabs>
         <TabPane title="OMC" key="OMC">
           <div className="alexyu-leading-8 pb-5">
-            <Button long type="primary" onClick={handleGetOMCCookie}>
+            <Button
+              long
+              type="primary"
+              onClick={handleGetOMCCookie}
+              loading={loading}>
               Get OMC Cookie
             </Button>
             <div>
