@@ -1,1 +1,1 @@
-# 设置omc cookie 插件
+# 设置cookie 插件
